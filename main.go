@@ -1,21 +1,25 @@
-package main
+package samtemp
 
 import (
+	"bytes"
 	"html/template"
-	"io"
 )
 
 // RenderTemplate renders the template file provided
-// Context is interpretted from the context []string argument
-// Returns the returns a string of the rendered template
-func RenderTemplate(html string, context []string) error {
+// Context is interpretted from the context interface argument
+// Currently all data associated with the interface must be relevant to the template.
+// Returns a pointer to a bytes.Buffer interface and an error
+func RenderTemplate(html string, context interface{}) (*bytes.Buffer, error) {
 	temp, err := template.ParseFiles(html)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	var out io.Writer
-	err = temp.Execute(out, context)
+	var out bytes.Buffer
+	err = temp.Execute(&out, context)
+	if err != nil {
+		return nil, err
+	}
 
-	return err
+	return &out, nil
 }
