@@ -26,6 +26,19 @@ func (e Email) RenderText() (*bytes.Buffer, error) {
 	return RenderTemplate(e.Text, e.Context)
 }
 
+func NewEmail(subject, sender, htmlFile, textFile string, recipients []string, context interface{}) (*Email, error) {
+	email := Email{
+		Subject:    subject,
+		Sender:     sender,
+		Recipients: recipients,
+		Html:       htmlFile,
+		Text:       textFile,
+		Context:    context,
+	}
+
+	return email, nil
+}
+
 // RenderTemplate renders the template file provided
 // Context is interpretted from the context interface argument
 // Currently all data associated with the interface must be relevant to the template.
