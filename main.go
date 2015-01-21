@@ -26,6 +26,13 @@ func (e Email) RenderText() (*bytes.Buffer, error) {
 	return RenderTemplate(e.Text, e.Context)
 }
 
+// Returns an Email struct with the following arguments
+// subject: The subject title of the email.
+// sender: Email address of the sending email account.
+// htmlFile: Filepath to the .html template to be rendered.
+// textFile: Filepath to the .txt template to rendered.
+// recipients: An array of email address for the email to be delivered to.
+// context: an object that maps the templates keywords with their intended values.
 func NewEmail(subject, sender, htmlFile, textFile string, recipients []string, context interface{}) (*Email, error) {
 	email := Email{
 		Subject:    subject,
