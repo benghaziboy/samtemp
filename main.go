@@ -2,7 +2,16 @@ package samtemp
 
 import (
 	"bytes"
+	"errors"
 	"html/template"
+)
+
+var (
+	errNoHtmlTemplate = errors.New("An html template must be provided to create the email.")
+	errNoRecipients   = errors.New("An email requires recipients to complete the transaction.")
+	errNoSubject      = errors.New("Subject is a required field for an email.")
+	errNoSender       = errors.New("An email requires a sender address to complete the transaction.")
+	errNoTextTemplate = errors.New("A text template must be provided to create the text.")
 )
 
 type Email struct {
@@ -12,6 +21,31 @@ type Email struct {
 	Html       string
 	Text       string
 	Context    interface{}
+}
+
+// Function to confirm all the required elements of the email are present
+func (e Email) IsValid() error {
+	if e.Subject == "" {
+		return errNoSubject
+	}
+
+	if e.Sender == "" {
+		return errNoSender
+	}
+
+	if len(e.Recipients) == 0 {
+		return errNoRecipients
+	}
+
+	if e.Html == "" {
+		return errNoHtmlTemplate
+	}
+
+	if e.Text == "" {
+		return errNoTextTemplate
+	}
+
+	return nil
 }
 
 // Returns a *bytes.Buffer value containing the rendered html template.
@@ -43,7 +77,12 @@ func NewEmail(subject, sender, htmlFile, textFile string, recipients []string, c
 		Context:    context,
 	}
 
-	return email, nil
+	err := email.IsValid()
+	if err != nil {
+		return nil, err
+	}
+
+	return *email, nil
 }
 
 // RenderTemplate renders the template file provided
