@@ -5,6 +5,14 @@ import (
 	"html/template"
 )
 
+type Email struct {
+	Subject    string
+	Sender     string
+	Recipients []string
+	Template   string
+	Context    interface{}
+}
+
 // RenderTemplate renders the template file provided
 // Context is interpretted from the context interface argument
 // Currently all data associated with the interface must be relevant to the template.
