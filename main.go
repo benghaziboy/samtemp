@@ -9,8 +9,17 @@ type Email struct {
 	Subject    string
 	Sender     string
 	Recipients []string
-	Template   string
+	Html       string
+	Text       string
 	Context    interface{}
+}
+
+func (e Email) RenderHtml() (*bytes.Buffer, error) {
+	return RenderTemplate(e.Html, e.Context)
+}
+
+func (e Email) RenderText() (*bytes.Buffer, error) {
+	return RenderTemplate(e.Text, e.Context)
 }
 
 // RenderTemplate renders the template file provided
