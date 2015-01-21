@@ -14,10 +14,14 @@ type Email struct {
 	Context    interface{}
 }
 
+// Returns a *bytes.Buffer value containing the rendered html template.
+// Utilizes the Email.Html string representing the `template.html` file.
 func (e Email) RenderHtml() (*bytes.Buffer, error) {
 	return RenderTemplate(e.Html, e.Context)
 }
 
+// Returns a *bytes.Buffer value containing the rendered text template.
+// Utilizes the Email.Html string representing the `template.text` file.
 func (e Email) RenderText() (*bytes.Buffer, error) {
 	return RenderTemplate(e.Text, e.Context)
 }
