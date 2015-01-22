@@ -89,8 +89,8 @@ func NewEmail(subject, sender, htmlFile, textFile string, recipients []string, c
 // Context is interpretted from the context interface argument
 // Currently all data associated with the interface must be relevant to the template.
 // Returns a pointer to a bytes.Buffer interface and an error
-func RenderTemplate(html string, context interface{}) (*bytes.Buffer, error) {
-	temp, err := template.ParseFiles(html)
+func RenderTemplate(src string, context interface{}) (*bytes.Buffer, error) {
+	temp, err := template.ParseFiles(src)
 	if err != nil {
 		return nil, err
 	}
