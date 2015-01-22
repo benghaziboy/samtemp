@@ -1,4 +1,4 @@
-package main
+package samtemp
 
 import (
 	. "gopkg.in/check.v1"
