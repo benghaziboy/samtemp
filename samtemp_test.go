@@ -28,6 +28,13 @@ type SamtempSuite struct{}
 
 var _ = Suite(&SamtempSuite{})
 
+func (s *SamtempSuite) TestEnvAuthenticateSes(c *C) {
+	c.Assert(Ses.Auth.AccessKey, Not(Equals), "")
+	c.Assert(Ses.Auth.AccessKey, Equals, AccessKey)
+	c.Assert(Ses.Auth.SecretKey, Not(Equals), "")
+	c.Assert(Ses.Auth.SecretKey, Equals, SecretKey)
+}
+
 func (s *SamtempSuite) TestRenderHtmlTemplate(c *C) {
 	re, err := RenderTemplate(testHtmlTemplate, testContext)
 	c.Assert(err, IsNil)
