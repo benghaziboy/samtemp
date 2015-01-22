@@ -1,4 +1,4 @@
-package samtemp
+package main
 
 import (
 	"bytes"
@@ -21,6 +21,18 @@ type Email struct {
 	Html       string
 	Text       string
 	Context    interface{}
+}
+
+// Returns a *bytes.Buffer value containing the rendered html template.
+// Utilizes the Email.Html string representing the `template.html` file.
+func (e Email) RenderHtml() (*string, error) {
+	return RenderTemplate(e.Html, e.Context)
+}
+
+// Returns a *bytes.Buffer value containing the rendered text template.
+// Utilizes the Email.Html string representing the `template.text` file.
+func (e Email) RenderText() (*string, error) {
+	return RenderTemplate(e.Text, e.Context)
 }
 
 // Function to confirm all the required elements of the email are present
@@ -48,18 +60,6 @@ func (e Email) IsValid() error {
 	return nil
 }
 
-// Returns a *bytes.Buffer value containing the rendered html template.
-// Utilizes the Email.Html string representing the `template.html` file.
-func (e Email) RenderHtml() (*bytes.Buffer, error) {
-	return RenderTemplate(e.Html, e.Context)
-}
-
-// Returns a *bytes.Buffer value containing the rendered text template.
-// Utilizes the Email.Html string representing the `template.text` file.
-func (e Email) RenderText() (*bytes.Buffer, error) {
-	return RenderTemplate(e.Text, e.Context)
-}
-
 // Returns an Email struct with the following arguments
 // subject: The subject title of the email.
 // sender: Email address of the sending email account.
@@ -82,14 +82,14 @@ func NewEmail(subject, sender, htmlFile, textFile string, recipients []string, c
 		return nil, err
 	}
 
-	return *email, nil
+	return &email, nil
 }
 
 // RenderTemplate renders the template file provided
 // Context is interpretted from the context interface argument
 // Currently all data associated with the interface must be relevant to the template.
 // Returns a pointer to a bytes.Buffer interface and an error
-func RenderTemplate(src string, context interface{}) (*bytes.Buffer, error) {
+func RenderTemplate(src string, context interface{}) (*string, error) {
 	temp, err := template.ParseFiles(src)
 	if err != nil {
 		return nil, err
@@ -101,5 +101,7 @@ func RenderTemplate(src string, context interface{}) (*bytes.Buffer, error) {
 		return nil, err
 	}
 
-	return &out, nil
+	s := out.String()
+
+	return &s, nil
 }
