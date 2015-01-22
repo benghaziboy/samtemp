@@ -23,19 +23,19 @@ type Email struct {
 	Context    interface{}
 }
 
-// Returns a *bytes.Buffer value containing the rendered html template.
-// Utilizes the Email.Html string representing the `template.html` file.
+// RenderHtml returns a *string containing the rendered html template.
+// Utilizes the Email.Html string referencing a template '.html' file.
 func (e Email) RenderHtml() (*string, error) {
 	return RenderTemplate(e.Html, e.Context)
 }
 
-// Returns a *bytes.Buffer value containing the rendered text template.
-// Utilizes the Email.Html string representing the `template.text` file.
+// RenderText returns a *string containing the rendered html template.
+// Utilizes the Email.Html string referencing a template '.txt' file.
 func (e Email) RenderText() (*string, error) {
 	return RenderTemplate(e.Text, e.Context)
 }
 
-// Function to confirm all the required elements of the email are present
+// IsValid returns an error if the the relevant Email object violates any of the constraints
 func (e Email) IsValid() error {
 	if e.Subject == "" {
 		return errNoSubject
@@ -60,7 +60,7 @@ func (e Email) IsValid() error {
 	return nil
 }
 
-// Returns an Email struct with the following arguments
+// NewEmail returns an Email struct with the following arguments
 // subject: The subject title of the email.
 // sender: Email address of the sending email account.
 // htmlFile: Filepath to the .html template to be rendered.
