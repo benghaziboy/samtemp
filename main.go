@@ -15,12 +15,14 @@ var (
 )
 
 type Email struct {
-	Subject    string
-	Sender     string
-	Recipients []string
-	Html       string
-	Text       string
-	Context    interface{}
+	Subject string
+	Sender  string
+	To      []string
+	Cc      []string
+	Bcc     []string
+	Html    string
+	Text    string
+	Context interface{}
 }
 
 // RenderHtml returns a *string containing the rendered html template.
@@ -45,7 +47,7 @@ func (e Email) IsValid() error {
 		return errNoSender
 	}
 
-	if len(e.Recipients) == 0 {
+	if len(e.To) == 0 {
 		return errNoRecipients
 	}
 
@@ -67,14 +69,16 @@ func (e Email) IsValid() error {
 // textFile: Filepath to the .txt template to rendered.
 // recipients: An array of email address for the email to be delivered to.
 // context: an object that maps the templates keywords with their intended values.
-func NewEmail(subject, sender, htmlFile, textFile string, recipients []string, context interface{}) (*Email, error) {
+func NewEmail(subject, sender, htmlFile, textFile string, to, cc, bcc []string, context interface{}) (*Email, error) {
 	email := Email{
-		Subject:    subject,
-		Sender:     sender,
-		Recipients: recipients,
-		Html:       htmlFile,
-		Text:       textFile,
-		Context:    context,
+		Subject: subject,
+		Sender:  sender,
+		To:      to,
+		Cc:      cc,
+		Bcc:     bcc,
+		Html:    htmlFile,
+		Text:    textFile,
+		Context: context,
 	}
 
 	err := email.IsValid()
